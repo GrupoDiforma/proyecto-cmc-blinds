@@ -1,0 +1,9 @@
+research/*.wav
+research/*.mp4
+research/*.m4a
+docs/*.wav
+docs/*.mp4
+docs/*.m4a
+.DS_Store
+Thumbs.db
+

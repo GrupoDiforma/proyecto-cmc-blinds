@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMC Ops — Demo V1 (datos de ejemplo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section id="login" class="login-screen">
+    <div class="login-card">
+      <div class="login-copy">
+        <img src="assets/logo-cmc.png" alt="CMC Blinds &amp; Shades" />
+        <h1>CMC Ops</h1>
+        <p>Boceto funcional para Camilo Castellón. Un solo flujo desde el distribuidor hasta instalación, con QuickBooks conectado — sin reescribir datos en Excel.</p>
+        <ul class="pain-list">
+          <li>Portal B2B: el distribuidor carga la orden y ve el estatus</li>
+          <li>Deducciones y labels automáticos para producción</li>
+          <li>Agenda de instalación + sync a QuickBooks</li>
+        </ul>
+      </div>
+      <div class="login-form">
+        <div>
+          <h2 style="margin:0 0 6px;font-family:var(--font-display);font-weight:560;">Entrar al demo</h2>
+          <p class="demo-note">Elige un rol para recorrer el mismo flujo desde tres ángulos.</p>
+        </div>
+        <div class="role-grid" id="roleGrid">
+          <button class="role selected" data-role="admin" type="button">
+            <strong>CMC Admin / Oficina</strong>
+            <span>Órdenes, producción, QuickBooks e instalaciones</span>
+          </button>
+          <button class="role" data-role="distributor" type="button">
+            <strong>Distribuidor / Diseñador</strong>
+            <span>Portal: crear orden y seguir estatus en vivo</span>
+          </button>
+          <button class="role" data-role="production" type="button">
+            <strong>Planta / Producción</strong>
+            <span>Work orders, deducciones y labels listos</span>
+          </button>
+        </div>
+        <button class="btn btn-primary" id="enterDemo" type="button">Abrir boceto CMC Ops</button>
+        <p class="demo-note">Demo V1 · Clientes, distribuidores y órdenes de ejemplo · Edwin Laverde · QuickBooks simulado</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="app" class="app-shell">
+    <div class="demo-banner">DEMO — Información ficticia para presentación a Camilo · No es producción real</div>
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/logo-cmc.png" alt="CMC" />
+        <div>
+          <strong>CMC Ops</strong>
+          <span id="roleLabel">Admin</span>
+        </div>
+      </div>
+      <nav class="nav" id="nav"></nav>
+      <div class="sidebar-foot">
+        Apoyo técnico en implementación:<br />
+        <strong style="color:#fff;">Edwin Laverde</strong><br />
+        Boca Raton · CMC Blinds &amp; Designs
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1 id="viewTitle">Dashboard</h1>
+          <p id="viewSubtitle">Vista general de la fábrica.</p>
+        </div>
+        <div class="badges">
+          <div class="badge qb">QuickBooks Online · Conectado</div>
+          <div class="badge ok" id="syncBadge">Último sync hace 2 min</div>
+        </div>
+      </div>
+
+      <section class="view active" id="view-dashboard">
+        <div class="grid stats">
+          <div class="card"><h3>Órdenes abiertas</h3><div class="stat-value" id="statOpen">—</div><div class="stat-note">Incluye portal + oficina (DEMO)</div></div>
+          <div class="card"><h3>En producción</h3><div class="stat-value" id="statProd">—</div><div class="stat-note">Deducciones ya calculadas</div></div>
+          <div class="card"><h3>Listas / pickup</h3><div class="stat-value" id="statReady">—</div><div class="stat-note">Distribuidores notificados</div></div>
+          <div class="card"><h3>Instalaciones semana</h3><div class="stat-value" id="statInstall">—</div><div class="stat-note">Palm Beach · Broward</div></div>
+        </div>
+        <div class="grid two" style="margin-top:16px;">
+          <div class="card">
+            <h3>Flujo vivo</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Orden</th><th>Cliente</th><th>Producto</th><th>Estado</th><th>QB</th></tr></thead>
+                <tbody id="liveOrders"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Qué resuelve este boceto</h3>
+            <ul class="pain-list" style="color:var(--ink);">
+              <li>Adiós doble digitación Excel ↔ QuickBooks</li>
+              <li>El distribuidor no pregunta “¿cómo va?”: lo ve</li>
+              <li>Labels y deducciones salen de la misma orden</li>
+              <li>Factura / invoice se empuja a QuickBooks en 1 clic</li>
+            </ul>
+            <div class="actions" style="margin-top:16px;">
+              <button class="btn btn-primary" data-go="orders" type="button">Ver órdenes</button>
+              <button class="btn btn-qb" data-go="quickbooks" type="button">Integración QuickBooks</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-customers">
+        <div class="card">
+          <div class="actions" style="justify-content:space-between;margin-bottom:12px;">
+            <h3 style="margin:0;">Clientes finales (DEMO)</h3>
+            <span class="badge warn">6 registros de ejemplo</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Nombre</th><th>Ciudad</th><th>Tipo</th><th>Teléfono</th><th>Jobs</th><th>Estado</th></tr></thead>
+              <tbody id="customersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-distributors">
+        <div class="card">
+          <div class="actions" style="justify-content:space-between;margin-bottom:12px;">
+            <h3 style="margin:0;">Distribuidores B2B (DEMO)</h3>
+            <button class="btn btn-primary" data-go="portal" type="button">Abrir portal</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Empresa / contacto</th><th>Ciudad</th><th>Órdenes abiertas</th><th>Saldo</th><th>Portal</th></tr></thead>
+              <tbody id="distributorsTable"></tbody>
+            </table>
+          </div>
+          <p class="demo-note" style="margin-top:14px;">Cada distribuidor tendría usuario/contraseña. En el demo, el rol “Distribuidor” simula la cuenta de Casa Bella Interiors.</p>
+        </div>
+      </section>
+
+      <section class="view" id="view-portal">
+        <div class="grid two">
+          <div class="card">
+            <h3>Nueva orden (Distribuidor)</h3>
+            <form class="form-grid" id="portalForm">
+              <div class="field"><label>Cuenta</label><input value="Casa Bella Interiors" readonly /></div>
+              <div class="field"><label>PO del distribuidor</label><input id="poInput" value="CB-1048" /></div>
+              <div class="field"><label>Producto</label>
+                <select id="productInput">
+                  <option>Zebra Blinds</option>
+                  <option>Translucent Roller</option>
+                  <option>Honeycomb</option>
+                  <option>Plantation Shutters</option>
+                  <option>Motorized Blackout</option>
+                </select>
+              </div>
+              <div class="field"><label>Habitación / ubicación</label><input id="roomInput" value="Living · W2" /></div>
+              <div class="field"><label>Ancho (in)</label><input id="widthInput" type="number" step="0.125" value="72.5" /></div>
+              <div class="field"><label>Alto (in)</label><input id="heightInput" type="number" step="0.125" value="84" /></div>
+              <div class="field full"><label>Notas</label><textarea id="notesInput">Montaje inside mount · control derecho</textarea></div>
+              <div class="field full actions">
+                <button class="btn btn-primary" type="submit">Enviar a CMC</button>
+                <button class="btn btn-secondary" data-go="orders" type="button">Ver mis órdenes</button>
+              </div>
+            </form>
+          </div>
+          <div class="card">
+            <h3>Estatus en vivo · CB-1048</h3>
+            <div class="timeline" id="portalTimeline">
+              <div class="timeline-item"><div class="dot"></div><div><strong>Orden recibida</strong><span>Hoy 9:14 AM · sin llamadas ni emails</span></div></div>
+              <div class="timeline-item"><div class="dot"></div><div><strong>En producción</strong><span>Deducciones aplicadas · WO-221</span></div></div>
+              <div class="timeline-item pending"><div class="dot"></div><div><strong>Lista para recoger</strong><span>Pendiente</span></div></div>
+              <div class="timeline-item pending"><div class="dot"></div><div><strong>Instalada / cerrada</strong><span>Pendiente</span></div></div>
+            </div>
+            <p class="demo-note" style="margin-top:18px;">Dolor resuelto: el diseñador entra con su usuario, carga medidas una sola vez y consulta el estado sin molestar a oficina.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-orders">
+        <div class="card">
+          <div class="actions" style="justify-content:space-between;margin-bottom:12px;">
+            <h3 style="margin:0;">Órdenes / Sales Orders</h3>
+            <div class="actions">
+              <button class="btn btn-secondary" data-go="portal" type="button">+ Desde portal</button>
+              <button class="btn btn-primary" id="convertEstimate" type="button">Convertir estimado → orden</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>SO</th><th>Origen</th><th>Distribuidor / cliente final</th><th>Producto</th><th>Líneas</th><th>Total</th><th>Estado</th><th>QB</th><th>Acción</th></tr></thead>
+              <tbody id="ordersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-workorders">
+        <div class="grid two">
+          <div class="card">
+            <h3 id="woTitle">Work Order</h3>
+            <p id="woMeta" style="margin-top:0;color:var(--muted);">—</p>
+            <div class="deduction-box">
+              <strong>Cut deductions (auto)</strong>
+              <div class="grid two" style="margin-top:12px;">
+                <div><div class="stat-note">Medida cliente</div><div id="woMeasure">—</div></div>
+                <div><div class="stat-note">Regla producto</div><div id="woRule">—</div></div>
+                <div><div class="stat-note">Ancho de corte</div><div class="stat-value" style="font-size:1.5rem;" id="woCutW">—</div></div>
+                <div><div class="stat-note">Alto de corte</div><div class="stat-value" style="font-size:1.5rem;" id="woCutH">—</div></div>
+              </div>
+            </div>
+            <div class="actions" style="margin-top:16px;">
+              <button class="btn btn-primary" data-go="labels" type="button">Generar labels</button>
+              <button class="btn btn-secondary" id="markReady" type="button">Marcar lista para pickup</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Cola de planta (DEMO)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>WO</th><th>SO</th><th>Producto</th><th>Corte</th><th>Estado</th></tr></thead>
+                <tbody id="woTable"></tbody>
+              </table>
+            </div>
+            <p class="demo-note" style="margin-top:14px;">Clic en una fila para ver deducciones. Producción no vuelve a vaciar medidas en Excel.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-labels">
+        <div class="grid two">
+          <div class="card">
+            <h3>Label listo para pegar</h3>
+            <div class="label-sheet">
+              <img class="logo-mini" src="assets/logo-cmc.png" alt="CMC" />
+              <h4>CMC Blinds &amp; Shades</h4>
+              <div class="label-meta">
+                <div id="labelWo"><strong>WO</strong></div>
+                <div id="labelDist">—</div>
+                <div id="labelProduct">—</div>
+                <div>Cut: <strong id="labelCut">—</strong></div>
+                <div id="labelControl">—</div>
+                <div>Boca Raton shop · 129 NW 13th St #21</div>
+              </div>
+              <div class="barcode" aria-hidden="true"></div>
+            </div>
+            <div class="actions" style="margin-top:16px;">
+              <button class="btn btn-primary" id="printLabel" type="button">Imprimir label</button>
+              <button class="btn btn-secondary" data-go="schedule" type="button">Agendar instalación</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Antes vs después</h3>
+            <div class="grid two">
+              <div>
+                <h3>Hoy</h3>
+                <p class="demo-note">Labels a mano, riesgo de equivocar habitación o medidas al copiar desde Excel.</p>
+              </div>
+              <div>
+                <h3>Con CMC Ops</h3>
+                <p class="demo-note">Label sale de la orden + deducciones. Menos tiempo y menos errores en instalación.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-schedule">
+        <div class="grid two">
+          <div class="card">
+            <h3>Agenda de instalaciones · semana (DEMO)</h3>
+            <div class="calendar" id="calendar"></div>
+            <p class="demo-note" style="margin-top:14px;">Asigna técnico en campo desde la misma orden. El distribuidor ve la fecha en su portal.</p>
+          </div>
+          <div class="card">
+            <h3>Técnicos de campo (DEMO)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nombre</th><th>Zona</th><th>Jobs hoy</th><th>Estado</th></tr></thead>
+                <tbody id="techTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-quickbooks">
+        <div class="grid two">
+          <div class="card">
+            <h3>Integración QuickBooks Online</h3>
+            <p style="margin-top:0;">CMC Ops <strong>no reemplaza</strong> tu contabilidad: se conecta a la suscripción que ya pagas (~$200+/mes) y evita reescribir invoices.</p>
+            <div class="timeline">
+              <div class="timeline-item"><div class="dot"></div><div><strong>Sales Order confirmada</strong><span>SO-1184 lista en CMC Ops</span></div></div>
+              <div class="timeline-item"><div class="dot"></div><div><strong>Push a QuickBooks</strong><span>Customer + Invoice + line items</span></div></div>
+              <div class="timeline-item"><div class="dot"></div><div><strong>Pago / balance en QB</strong><span>Reportes financieros siguen en QuickBooks</span></div></div>
+            </div>
+            <div class="actions" style="margin-top:16px;">
+              <button class="btn btn-qb" id="syncQb" type="button">Sincronizar SO-1184 → QuickBooks</button>
+              <button class="btn btn-secondary" type="button" id="openMapping">Ver mapeo de campos</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Mapeo (demo)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>CMC Ops</th><th>QuickBooks</th></tr></thead>
+                <tbody>
+                  <tr><td>Distribuidor / Customer</td><td>Customer</td></tr>
+                  <tr><td>Sales Order lines</td><td>Invoice line items</td></tr>
+                  <tr><td>PO distribuidor</td><td>Custom field / Memo</td></tr>
+                  <tr><td>Payment link (fase 2)</td><td>Payment / Receive payment</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="demo-note" style="margin-top:14px;">Implementación acompañada por Edwin Laverde: conexión OAuth, pruebas con 2–3 distribuidores piloto y capacitación a oficina/planta.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="grid three">
+          <div class="card"><h3>Follow-ups</h3><div class="stat-value">5</div><div class="stat-note">Estimados sin convertir</div></div>
+          <div class="card"><h3>Órdenes cerradas (mes)</h3><div class="stat-value">48</div><div class="stat-note">+18% vs mes anterior</div></div>
+          <div class="card"><h3>Errores de medida</h3><div class="stat-value">0</div><div class="stat-note">Meta: eliminar re-digitación</div></div>
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <h3>Propuesta de valor para Camilo</h3>
+          <p>Flujo estándar de la industria de cortinas/persianas (portal → estimado → sales order → work order → labels → instalación → contabilidad), personalizado con la imagen de <a href="https://cmcblinds.com/" target="_blank" rel="noopener">cmcblinds.com</a>, resolviendo el proceso manual actual y dejando QuickBooks como sistema contable oficial.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
