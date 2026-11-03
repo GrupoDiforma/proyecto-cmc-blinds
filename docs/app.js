@@ -360,6 +360,12 @@ function enterApp() {
   toast(`Demo como ${roleNames[state.role]} · datos de ejemplo`);
 }
 
+function backToRoles() {
+  $("#app").classList.remove("active");
+  $("#login").style.display = "";
+  toast("Elige otro rol para seguir explorando el demo");
+}
+
 document.querySelectorAll("#roleGrid .role").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#roleGrid .role").forEach((b) => b.classList.remove("selected"));
@@ -369,6 +375,7 @@ document.querySelectorAll("#roleGrid .role").forEach((btn) => {
 });
 
 $("#enterDemo").addEventListener("click", enterApp);
+$("#switchRole").addEventListener("click", backToRoles);
 
 document.body.addEventListener("click", (e) => {
   const woRow = e.target.closest("[data-wo]");

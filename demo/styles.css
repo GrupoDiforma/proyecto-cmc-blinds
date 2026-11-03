@@ -106,6 +106,14 @@ a { color: inherit; }
   color: #aab6a5;
   line-height: 1.5;
 }
+.sidebar-foot .btn-secondary {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.18);
+  color: #f4f7f2;
+}
+.sidebar-foot .btn-secondary:hover {
+  background: rgba(255,255,255,0.16);
+}
 
 .main { padding: 28px; }
 .topbar {
@@ -460,5 +468,16 @@ tbody tr.clickable { cursor: pointer; }
   .grid.three,
   .form-grid,
   .login-card { grid-template-columns: 1fr; }
-  .sidebar-foot { display: none; }
+  .sidebar-foot {
+    display: block;
+    border-top: 0;
+    padding-top: 0;
+    font-size: 0;
+    color: transparent;
+  }
+  .sidebar-foot .btn-secondary {
+    font-size: 0.85rem;
+    color: #f4f7f2;
+    margin-bottom: 0 !important;
+  }
 }
